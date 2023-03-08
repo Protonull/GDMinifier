@@ -1,5 +1,5 @@
 import inlineAssets from "npm:inline-assets@1.4.8";
-import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
+import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
 import postcss from "https://deno.land/x/postcss@8.4.16/mod.js";
 import postcssImporter from "npm:postcss-import-url@7.2.0";
 import { ensureFile } from "https://deno.land/std@0.178.0/fs/mod.ts";
@@ -31,6 +31,25 @@ export default async function minify(
                 dataUrls: true
             })
         ]).process(styleTag.textContent, { from: undefined });
+    }
+
+    // Unwrap referral links
+    for (const linkTag of parsedDocument.querySelectorAll("a")) {
+        const href = (linkTag as Element).attributes.getNamedItem("href") ?? null;
+        if (href === null) {
+            continue;
+        }
+        let url: URL = null!;
+        try {
+            url = new URL(href.value);
+        }
+        catch (_e) {
+            // It's an invalid URL, probably an anchor link.
+            continue;
+        }
+        if (url.href.startsWith("https://www.google.com/url")) {
+            href.value = url.searchParams.get("q");
+        }
     }
 
     // Convert document back into raw HTML plaintext
