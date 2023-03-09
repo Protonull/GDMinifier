@@ -5,4 +5,4 @@ deno install \
     --allow-net \
     --allow-env \
     -n gdminify \
-    https://deno.land/x/gdminifier@v0.1.0/cli.ts
+    https://deno.land/x/gdminifier@v0.1.1/cli.ts
