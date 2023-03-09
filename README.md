@@ -4,7 +4,7 @@ A tool written in Deno to consolidate and minify the assets of exported document
 
 ## Installation
 
-`deno install --allow-read --allow-write --allow-net --allow-env -n gdminify https://raw.githubusercontent.com/Protonull/GDMinifier/master/cli.ts`
+`curl -sSf https://deno.land/x/gdminifier/install.sh | sh`
 
 ## Usage
 
